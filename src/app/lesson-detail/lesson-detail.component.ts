@@ -36,16 +36,20 @@ export class LessonDetailComponent implements OnInit {
 
   handleClick(): void {
     console.log('click');
-    const rar = new RecordActivityRequest(this.lesson.enrollmentID, 'xapi');
+    const xapi = '{"actor":{"mbox":"mailto:bob@bob.com","objectType":"Agent"},"verb":{"id":"http://adlnet.gov/expapi/verbs/completed",' +
+      '"display":{"en-US":"completed"}},"object":{"id":"http://adlnet.gov/expapi/activities/example",' +
+      '"definition":{"name":{"en-US":"Click"},"description":{"en-US":"Clicked a button"}},"objectType":"Activity"}}';
+    const rar = new RecordActivityRequest(this.lesson.enrollmentID, xapi);
     this.lrsService.recordActivity(rar).subscribe(eid => console.log(`${eid.enrollmentID} updated`));
   }
 
   completeClick(): void {
     console.log('complete click');
-    const ei = new EnrollmentInfo();
-    ei.enrollmentID = this.lesson.enrollmentID;
-    // const rar = new RecordActivityRequest(this.lesson.enrollmentID, 'xapi');
-    this.lrsService.completeLesson(ei).subscribe(eid => console.log(`${eid.enrollmentID} completed`));
+    const xapi = '{"actor":{"mbox":"mailto:bob@bob.com","objectType":"Agent"},"verb":{"id":"http://adlnet.gov/expapi/verbs/completed",' +
+      '"display":{"en-US":"completed"}},"object":{"id":"http://adlnet.gov/expapi/activities/example",' +
+      '"definition":{"name":{"en-US":"Course"},"description":{"en-US":"Course Complete"}},"objectType":"Activity"}}';
+    const rar = new RecordActivityRequest(this.lesson.enrollmentID, xapi);
+    this.lrsService.completeLesson(rar).subscribe(eid => console.log(`${eid.enrollmentID} completed`));
     this.lesson.complete = true;
   }
 }

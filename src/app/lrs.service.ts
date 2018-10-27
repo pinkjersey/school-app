@@ -58,10 +58,10 @@ export class LrsService {
     );
   }
 
-  completeLesson (ei: EnrollmentInfo): Observable<EnrollmentInfo> {
+  completeLesson (ei: RecordActivityRequest): Observable<EnrollmentInfo> {
     return this.http.post<RecordActivityRequest>(this.cordaUrl + 'lesson-complete-request', ei, httpOptions).pipe(
-      tap((e: EnrollmentInfo) => this.log(`added activity to id=${e.enrollmentID}`)),
-      catchError(this.handleError<Lesson>('recordActivity'))
+      tap((e: EnrollmentInfo) => this.log(`added activity to id=${e.enrollmentID} and marked lesson complete`)),
+      catchError(this.handleError<Lesson>('completeLesson'))
     );
   }
 
