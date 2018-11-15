@@ -9,6 +9,7 @@ import {RecordActivityRequest} from './record-activity-request';
 import {EnrollmentInfo} from './enrollment-info';
 import {Transfer} from './transfer';
 import { isDevMode } from '@angular/core';
+import {Xapi} from './xapi';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -48,6 +49,14 @@ export class LrsService {
       tap((l: Lesson) => this.log(`added enrollment w/ id=${l.lessonName}`)),
       catchError(this.handleError<Lesson>('enrollStudent'))
     );
+  }
+
+  getActivity (ei: string): Observable<Xapi[]> {
+    return this.http.get<Xapi[]>(this.statementsUrl + 'enrollment' + `/${ei}`, httpOptions)
+      .pipe(
+        tap(xapi => this.log(`fetched xapi strings ${xapi.length}`)),
+        catchError(this.handleError('getActivity', []))
+      );
   }
 
   recordActivity (rar: RecordActivityRequest): Observable<EnrollmentInfo> {

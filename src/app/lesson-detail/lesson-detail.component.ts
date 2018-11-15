@@ -6,6 +6,7 @@ import {RecordActivityRequest} from '../record-activity-request';
 import {EnrollmentInfo} from '../enrollment-info';
 import {Transfer} from '../transfer';
 import {MeService} from '../me.service';
+import {Xapi} from '../xapi';
 
 @Component({
   selector: 'app-lesson-detail',
@@ -17,11 +18,13 @@ export class LessonDetailComponent implements OnInit {
   schools: string[];
   me: string;
   transferSchool: string;
+  xapis: Xapi[];
 
   constructor(private route: ActivatedRoute, private lrsService: LrsService, private meService: MeService) { }
 
   ngOnInit(): void {
     this.getLesson();
+    this.getXapi();
     this.getSchools();
     this.getMe();
   }
@@ -30,6 +33,12 @@ export class LessonDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     this.lrsService.getLesson(id)
       .subscribe(lesson => this.lesson = lesson);
+  }
+
+  getXapi(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.lrsService.getActivity(id)
+      .subscribe(xapis => this.xapis = xapis);
   }
 
   getSchools(): void {
@@ -63,6 +72,9 @@ export class LessonDetailComponent implements OnInit {
     const xapi = '{"actor":{"mbox":"mailto:bob@bob.com","objectType":"Agent"},"verb":{"id":"http://adlnet.gov/expapi/verbs/completed",' +
       '"display":{"en-US":"completed"}},"object":{"id":"http://adlnet.gov/expapi/activities/example",' +
       '"definition":{"name":{"en-US":"Click"},"description":{"en-US":"Clicked a button"}},"objectType":"Activity"}}';
+    const xapiObject = new Xapi();
+    xapiObject.xapi = xapi;
+    this.xapis.push(xapiObject);
     const rar = new RecordActivityRequest(this.lesson.enrollmentID, xapi);
     this.lrsService.recordActivity(rar).subscribe(eid => console.log(`${eid.enrollmentID} updated`));
   }
@@ -72,6 +84,9 @@ export class LessonDetailComponent implements OnInit {
     const xapi = '{"actor":{"mbox":"mailto:bob@bob.com","objectType":"Agent"},"verb":{"id":"http://adlnet.gov/expapi/verbs/completed",' +
       '"display":{"en-US":"completed"}},"object":{"id":"http://adlnet.gov/expapi/activities/example",' +
       '"definition":{"name":{"en-US":"Course"},"description":{"en-US":"Course Complete"}},"objectType":"Activity"}}';
+    const xapiObject = new Xapi();
+    xapiObject.xapi = xapi;
+    this.xapis.push(xapiObject);
     const rar = new RecordActivityRequest(this.lesson.enrollmentID, xapi);
     this.lrsService.completeLesson(rar).subscribe(eid => console.log(`${eid.enrollmentID} completed`));
     this.lesson.complete = true;

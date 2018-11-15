@@ -32,6 +32,11 @@
       <button (click)="completeClick()" type="button" class="btn btn-secondary">Hit this when done!</button>
     </div>
   </div>
+  <div class="row top7" *ngFor="let x of xapis">
+    <div class="col-sm">
+      <p>{{x.xapi}}</p>
+    </div>
+  </div>
 </div>
 
 
