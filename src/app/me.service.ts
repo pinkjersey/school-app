@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { isDevMode } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -13,8 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class MeService {
-  private angularDev = false;
-  private cordaUrl = this.angularDev ? 'http://localhost:10010/api/lrs/me' : '/api/lrs/me';
+  private cordaUrl = isDevMode() ? 'http://localhost:10010/api/lrs/me' : '/api/lrs/me';
 
   constructor(
     private http: HttpClient,
@@ -46,7 +46,6 @@ export class MeService {
     };
   }
 
-  /** Log a HeroService message with the MessageService */
   private log(message: string) {
   }
 }

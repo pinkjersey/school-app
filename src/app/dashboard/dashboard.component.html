@@ -1,1 +1,12 @@
-<p>Number of lessons: {{lessons.length}}</p>
+<div class="container">
+  <div class="jumbotron">
+    <h1>#Team-Blockchain</h1>
+    <h2>xAPI Demo</h2>
+  </div>
+  <div class="panel panel-primary" *ngIf="lessons">
+    <div class="panel-heading">Status</div>
+    <div class="panel-body">
+      <h3>Number of lessons: {{lessons.length}}</h3>
+    </div>
+  </div>
+</div>

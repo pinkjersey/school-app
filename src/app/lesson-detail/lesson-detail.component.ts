@@ -5,6 +5,7 @@ import {LrsService} from '../lrs.service';
 import {RecordActivityRequest} from '../record-activity-request';
 import {EnrollmentInfo} from '../enrollment-info';
 import {Transfer} from '../transfer';
+import {MeService} from '../me.service';
 
 @Component({
   selector: 'app-lesson-detail',
@@ -13,11 +14,16 @@ import {Transfer} from '../transfer';
 })
 export class LessonDetailComponent implements OnInit {
   @Input() lesson: Lesson;
+  schools: string[];
+  me: string;
+  transferSchool: string;
 
-  constructor(private route: ActivatedRoute, private lrsService: LrsService) { }
+  constructor(private route: ActivatedRoute, private lrsService: LrsService, private meService: MeService) { }
 
   ngOnInit(): void {
     this.getLesson();
+    this.getSchools();
+    this.getMe();
   }
 
   getLesson(): void {
@@ -26,11 +32,29 @@ export class LessonDetailComponent implements OnInit {
       .subscribe(lesson => this.lesson = lesson);
   }
 
+  getSchools(): void {
+    this.lrsService.getSchools()
+      .subscribe(schools => this.schools = schools);
+  }
+
+  getMe(): void {
+    this.meService.getMe()
+      .subscribe(me => this.me = me);
+  }
+
   transferClick(): void {
     console.log('transfer click');
     const tr = new Transfer();
     tr.enrollmentID = this.lesson.enrollmentID;
-    tr.otherPartyName = 'O=SchoolA,L=Detroit,C=US';
+    if (this.transferSchool === 'SchoolA') {
+      tr.otherPartyName = 'O=SchoolA,L=Detroit,C=US';
+    } else if (this.transferSchool === 'SchoolB') {
+      tr.otherPartyName = 'O=SchoolB,L=New York,C=US';
+    } else if (this.transferSchool === 'SchoolC') {
+      tr.otherPartyName = 'O=SchoolC,L=Chicago,C=US';
+    }
+
+
     this.lrsService.transfer(tr).subscribe(eid => console.log(`${eid.enrollmentID} transferred`));
   }
 

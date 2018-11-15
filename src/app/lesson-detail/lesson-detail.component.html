@@ -1,29 +1,39 @@
-<div>
-  <div class="container" *ngIf="lesson">
-    <div class="row">
-      <div class="col-sm">
-        <h2>Enrollment Details</h2>
-      </div>
+<div class="container" *ngIf="lesson" >
+  <div class="row">
+    <div class="col-sm">
+      <h2>Enrollment Details</h2>
     </div>
-    <div class="row">
-      <div class="col-sm">
-        <span class="monospaced">{{lesson.enrollmentID}}</span>
-      </div>
+  </div>
+  <div class="row top7">
+    <div class="col-sm">
+      <span class="monospaced">{{lesson.enrollmentID}}</span>
     </div>
-    <div class="row" *ngIf="lesson.complete">
-      <div class="col-sm"><span>Lesson complete</span></div>
+  </div>
+  <div class="row top7" *ngIf="lesson.complete">
+    <div class="col-sm"><span>Lesson complete</span></div>
+  </div>
+  <div class="row top7" *ngIf="lesson.complete">
+    <div class="col-sm-3">
+      <select [(ngModel)]="transferSchool">
+        <option *ngFor="let s of schools" [ngValue]="s">{{s}}</option>
+      </select>
     </div>
-    <div class="row" *ngIf="lesson.complete">
-      <div class="col-sm"><button (click)="transferClick()" type="button" class="btn btn-primary">Transfer</button></div>
+    <div class="col-sm-3">
+      <button (click)="transferClick()" type="button" class="btn btn-primary">Transfer</button>
     </div>
-    <div class="row" *ngIf="lesson.complete == false">
-      <div class="col-sm"><button (click)="handleClick()" type="button" class="btn btn-primary">Hit this!</button></div>
+  </div>
+  <div class="row top7" *ngIf="lesson.complete == false">
+    <div class="col-sm">
+      <button (click)="handleClick()" type="button" class="btn btn-primary">Hit this!</button>
     </div>
-    <div class="row" *ngIf="lesson.complete == false">
-      <div class="col-sm"><button (click)="completeClick()" type="button" class="btn btn-secondary">Hit this when done!</button></div>
+  </div>
+  <div class="row top7" *ngIf="lesson.complete == false">
+    <div class="col-sm">
+      <button (click)="completeClick()" type="button" class="btn btn-secondary">Hit this when done!</button>
     </div>
   </div>
 </div>
+
 
 
 

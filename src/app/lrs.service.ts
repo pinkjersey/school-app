@@ -8,7 +8,7 @@ import {Lesson} from './lesson';
 import {RecordActivityRequest} from './record-activity-request';
 import {EnrollmentInfo} from './enrollment-info';
 import {Transfer} from './transfer';
-
+import { isDevMode } from '@angular/core';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,9 +18,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class LrsService {
-  private angularDev = false;
-  private cordaUrl = this.angularDev ? 'http://localhost:10010/api/lrs/' : '/api/lrs/';
-  private statementsUrl = this.angularDev ? 'http://localhost:10010/api/statements/' : '/api/statements/';
+  private cordaUrl = isDevMode() ? 'http://localhost:10010/api/lrs/' : '/api/lrs/';
+  private statementsUrl = isDevMode() ? 'http://localhost:10010/api/statements/' : '/api/statements/';
 
   constructor(
     private http: HttpClient,
@@ -70,6 +69,14 @@ export class LrsService {
       tap((e: EnrollmentInfo) => this.log(`transferred id=${e.enrollmentID}`)),
       catchError(this.handleError<Lesson>('transfer'))
     );
+  }
+
+  getSchools (): Observable<string[]> {
+    return this.http.get<string[]>(this.cordaUrl + 'schools', httpOptions)
+      .pipe(
+        tap(schools => this.log(`fetched schools ${schools.length}`)),
+        catchError(this.handleError('getSchools', []))
+      );
   }
 
   private handleError<T> (operation = 'operation', result?: T) {
